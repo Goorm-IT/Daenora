@@ -3,3 +3,7 @@
 <h1>구상도</h1>
 
 ![unknown](https://user-images.githubusercontent.com/5088870/112835394-2e594180-90d4-11eb-8c24-7f05e2a7bfe5.png)
+
+<h1>UI/UX프로토타입</h1>
+
+![캡처](https://user-images.githubusercontent.com/5088870/113541928-25112d00-961e-11eb-9404-fae60ffb85cd.JPG)
