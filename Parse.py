@@ -1,6 +1,5 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from multiprocessing import pool
 
 
 # TODO 객체화 작업 해야함, 병렬화 해봄
@@ -14,7 +13,6 @@ class Parse:
         self.options.add_argument("disable-gpu")
         # 드라이버 설정
         self.driver = webdriver.Chrome('../../PycharmProjects/TIL/chromedriver.exe', chrome_options=self.options)
-        self.dict = dict()
         self.homework_address = '&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100'
 
     def login(self, user_id, user_pw):
@@ -75,15 +73,8 @@ class Parse:
         self.driver.close()
 
 
-input_id = '201663035'
-input_pw = 'Wjdtls753!'
+input_id = ''
+input_pw = ''
 test = Parse()
 test.login(input_id, input_pw)
 test.classroom()
-
-if __name__ == '__main__':
-    input_id = '201663035'
-    input_pw = 'Wjdtls753!'
-    test = Parse()
-    pool = pool.Pool(processes=2)
-    pool.map(test.login(input_id, input_pw), test.classroom())
