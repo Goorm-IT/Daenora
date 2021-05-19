@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import './register.dart';
+import './homework.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,25 +14,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Danora',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: testmain(),
+      debugShowCheckedModeBanner: false,
+      home: login(),
     );
   }
 }
 
 
+// ignore: camel_case_types
 class login extends StatelessWidget {
   login({
     Key key,
@@ -45,7 +40,7 @@ class login extends StatelessWidget {
             offset: Offset(67.0, 379.0),
             child:
             // Adobe XD layer: 'Input' (group)
-            SizedBox(
+            SizedBox( // 아이디 + 비밀번호 박스
               width: 279.0,
               height: 112.0,
               child: Stack(
@@ -61,7 +56,7 @@ class login extends StatelessWidget {
                     // Adobe XD layer: 'Input' (group)
                     Stack(
                       children: <Widget>[
-                        Pinned.fromSize(
+                        Pinned.fromSize( // 아이디 박스
                           bounds: Rect.fromLTWH(0.0, 0.0, 279.0, 48.0),
                           size: Size(279.0, 48.0),
                           pinLeft: true,
@@ -78,7 +73,7 @@ class login extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Pinned.fromSize(
+                        Pinned.fromSize( // 아이디 힌트 텍스트
                           bounds: Rect.fromLTWH(20.0, 14.0, 42.0, 18.0),
                           size: Size(279.0, 48.0),
                           pinLeft: true,
@@ -99,7 +94,7 @@ class login extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Pinned.fromSize(
+                  Pinned.fromSize( // 비밀번호 박스?
                     bounds: Rect.fromLTWH(0.0, 64.0, 279.0, 48.0),
                     size: Size(279.0, 112.0),
                     pinLeft: true,
@@ -110,7 +105,7 @@ class login extends StatelessWidget {
                     // Adobe XD layer: 'Input' (group)
                     Stack(
                       children: <Widget>[
-                        Pinned.fromSize(
+                        Pinned.fromSize( // 비밀번호 박스?
                           bounds: Rect.fromLTWH(0.0, 0.0, 279.0, 48.0),
                           size: Size(279.0, 48.0),
                           pinLeft: true,
@@ -127,7 +122,7 @@ class login extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Pinned.fromSize(
+                        Pinned.fromSize( // 비밀번호 힌트 텍스트
                           bounds: Rect.fromLTWH(20.0, 14.0, 56.0, 18.0),
                           size: Size(279.0, 48.0),
                           pinLeft: true,
@@ -224,7 +219,7 @@ class login extends StatelessWidget {
                   transition: LinkTransition.Fade,
                   ease: Curves.easeOut,
                   duration: 0.3,
-                  pageBuilder: () => testregister(),
+                  pageBuilder: () => register(),
                 ),
               ],
               child: SizedBox(
@@ -284,7 +279,7 @@ class login extends StatelessWidget {
                   transition: LinkTransition.Fade,
                   ease: Curves.easeOut,
                   duration: 0.3,
-                  pageBuilder: () => testhomework(),
+                  pageBuilder: () => homework(),
                 ),
               ],
               child: SizedBox(
