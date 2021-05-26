@@ -96,8 +96,12 @@ class _LogInState extends State<LogIn> {
                                         ),
                                         onPressed: () =>
                                         {
-                                          showSnackBar(context)
-                                          // 여기에다가ㅏ해야함
+                                          incorrectSnackbar(context)
+                                          // if(){
+                                          //   correctSnackBar(context)
+                                          // }else if(){
+                                          //   incorrectSnackbar(context)
+                                          // }
                                         }
                                     ),
                                   )
@@ -115,7 +119,7 @@ class _LogInState extends State<LogIn> {
 }
 
 
-void showSnackBar(BuildContext context){
+void incorrectSnackbar(BuildContext context){
 
   Scaffold.of(context).showSnackBar(
     SnackBar(content:
@@ -124,5 +128,15 @@ void showSnackBar(BuildContext context){
       duration: Duration(seconds: 2),
       backgroundColor: Colors.red,
     )
+  );
+}
+
+void correctSnackBar(BuildContext context){
+  Scaffold.of(context).showSnackBar(
+      SnackBar(content: Text('로그인 완료',
+        textAlign: TextAlign.center,),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.blue,
+      )
   );
 }

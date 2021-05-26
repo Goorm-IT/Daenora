@@ -1,3 +1,4 @@
+from os import times
 from selenium import webdriver
 from bs4 import BeautifulSoup
 
@@ -12,8 +13,11 @@ class Parse:
         self.options.add_argument('window-size=1920x1080')
         self.options.add_argument("disable-gpu")
         # 드라이버 설정
-        self.driver = webdriver.Chrome('../../PycharmProjects/TIL/chromedriver.exe', chrome_options=self.options)
+        self.driver = webdriver.Chrome('chromedriver.exe')
         self.homework_address = '&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100'
+
+        # value
+        self.work_list = list()
 
     def login(self, user_id, user_pw):
         self.driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome#')
@@ -36,6 +40,15 @@ class Parse:
 
             # 로그인 버튼 클릭
             self.driver.find_element_by_xpath('//*[@id="loginForm"]/fieldset/p[2]/a').click()
+            try:
+                result = self.driver.switch_to.alert.accept()
+
+                self.driver.close()
+                print("로그인 오류")
+            except:
+                print("로그인 정상")
+
+                
 
     def classroom(self):
 
@@ -45,8 +58,8 @@ class Parse:
         soup = BeautifulSoup(r, "html.parser")
         select = soup.select_one('#\# > fieldset > select')
 
-        for i in select.find_all('option')[1:]:
-            self.dict[i.get_text()] = i['value'].split(",")
+        # for i in select.find_all('option')[1:]:
+        #     self.dict[i.get_text()] = i['value'].split(",")
 
         # print(self.dict)
         # menu_00031 사이버 강의실 배너 메뉴번호
@@ -68,13 +81,20 @@ class Parse:
             rows = tbody.find_elements_by_tag_name("tr")[i]
             body = rows.find_elements_by_tag_name("td")
             for index, value in enumerate(body):
-                print(value.text)
+                self.work_list.append(value.text)
+            n = 8
+            split_list = []
+            a = [self.work_list[i * n:(i + 1) * n] for i in range ((len(self.work_list) - 1 + n) // n)]
+            
+            for k in a:
+                split_list.append(' '.join(k))
+            print(split_list)
 
         self.driver.close()
 
 
-input_id = ''
-input_pw = ''
+input_id = '201663035'
+input_pw = 'Wjdtls753!'
 test = Parse()
 test.login(input_id, input_pw)
 test.classroom()
