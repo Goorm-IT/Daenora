@@ -96,6 +96,7 @@ class _LogInState extends State<LogIn> {
                                         ),
                                         onPressed: () =>
                                         {
+                                          server.postReq(),
                                           incorrectSnackbar(context)
                                           // if(){
                                           //   correctSnackBar(context)
@@ -140,3 +141,19 @@ void correctSnackBar(BuildContext context){
       )
   );
 }
+class Server {
+  Future<void> postReq() async {
+    var url = Uri.parse(
+        'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
+    http.Response response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: <String, String>{
+        'id': 'id',
+        'pw': 'pw'
+      },);
+  }
+}
+
+Server server = Server();
