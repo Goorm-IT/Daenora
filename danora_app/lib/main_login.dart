@@ -26,6 +26,25 @@ class _LogInState extends State<LogIn> {
   TextEditingController id = TextEditingController();
   TextEditingController pw = TextEditingController();
 
+
+
+  postReq(id, pw) async{
+
+    var url = Uri.parse(
+        'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
+    http.Response response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: <String, String>{'id': id.text, 'pw': pw.text},
+    );
+    if (response.statusCode == 200)
+      return response.body;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,8 +109,8 @@ class _LogInState extends State<LogIn> {
                                     ),
                                   ),
                                   onPressed: () => {
-                                        server.postReq(),
-                                        incorrectSnackbar(context)
+                                        postReq(id, pw),
+                                        correctSnackBar(context)
                                         // if(){
                                         //   correctSnackBar(context)
                                         // }else if(){
@@ -130,18 +149,3 @@ void correctSnackBar(BuildContext context) {
   ));
 }
 
-class Server {
-  Future<void> postReq() async {
-    var url = Uri.parse(
-        'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
-    http.Response response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: <String, String>{'id': 'id', 'pw': 'pw'},
-    );
-  }
-}
-
-Server server = Server();
