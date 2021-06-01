@@ -1,3 +1,4 @@
+import 'package:danora_app/screenA.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -96,7 +97,7 @@ class _LogInState extends State<LogIn> {
                                         ),
                                         onPressed: () =>
                                         {
-                                          server.postReq(),
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => screenA())),
                                           incorrectSnackbar(context)
                                           // if(){
                                           //   correctSnackBar(context)
@@ -141,19 +142,22 @@ void correctSnackBar(BuildContext context){
       )
   );
 }
-class Server {
-  Future<void> postReq() async {
-    var url = Uri.parse(
-        'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
-    http.Response response = await http.post(url,
-      headers: <String, String>{
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: <String, String>{
-        'id': 'id',
-        'pw': 'pw'
-      },);
-  }
-}
 
-Server server = Server(); 
+
+// class Server {
+//   Future<void> postReq() async {
+//     var url = Uri.parse(
+//         'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
+//     http.Response response = await http.post(url,
+//       headers: <String, String>{
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//       },
+//       body: <String, String>{
+//         'id': 'id',
+//         'pw': 'pw'
+//       },);
+//   }
+// }
+//
+// Server server = Server();
+
