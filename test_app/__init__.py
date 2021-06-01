@@ -14,6 +14,17 @@ def app_main():
     pw = request_data['pw']
     
     ps  = Parse()
+    return jsonify({'code':ps.login(id,pw)})
+
+
+@app.route('/classroom', methods=['GET', 'POST'])
+def classroom():
+    request_data = request.data
+    request_data = json.loads(request_data)
+    id = request_data['id']
+    pw = request_data['pw']
+        
+    ps  = Parse()
     ps.login(id, pw)
-    return jsonify({'data':ps.classroom()})
-    
+    return jsonify(ps.classroom())
+

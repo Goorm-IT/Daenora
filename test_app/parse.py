@@ -16,7 +16,9 @@ class Parse:
         self.options.add_argument('--no-sandbox')
         self.options.add_argument("--disable-dev-shm-usage")
         # 드라이버 설정
-        self.driver = webdriver.Chrome(chrome_options=self.options, executable_path="/home/ubuntu/DAENORA/chromedriver")
+        # /home/ubuntu/DAENORA/chromedriver
+        # ../chromedriver
+        self.driver = webdriver.Chrome(chrome_options=self.options, executable_path="/home/ubuntu/flaskTest/chromedriver")
         self.homework_address = '&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100'
 
     def login(self, user_id, user_pw):
@@ -40,14 +42,12 @@ class Parse:
 
             # 로그인 버튼 클릭
             self.driver.find_element_by_xpath('//*[@id="loginForm"]/fieldset/p[2]/a').click()
-            incorrect = 'Longin Error'
-            correct = 'Login accept'
             try:
                 result = self.driver.switch_to.alert.accpt()
                 self.driver.close()
-                return 'login error'
+                return 400
             except:
-                pass
+                return 200
 
 
 
@@ -89,6 +89,3 @@ class Parse:
             new_list.append(' '.join(k))
         return new_list
 
-ps = Parse()
-ps.login('201663035','Wjdtls753!')
-print(ps.classroom())
