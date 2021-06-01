@@ -1,6 +1,8 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import sys
+
+
 # -*-coding:utf-8-*-
 
 # TODO 객체화 작업 해야함, 병렬화 해봄
@@ -9,7 +11,7 @@ class Parse:
 
     def __init__(self):
         # Headless Chrome option
-        # self.dict = dict()
+        self.dict = dict()
         self.test_list = list()
         self.options = webdriver.ChromeOptions()
         self.options.add_argument('headless')
@@ -18,7 +20,8 @@ class Parse:
         # 드라이버 설정
         # /home/ubuntu/DAENORA/chromedriver
         # ../chromedriver
-        self.driver = webdriver.Chrome(chrome_options=self.options, executable_path="/home/ubuntu/flaskTest/chromedriver")
+        self.driver = webdriver.Chrome(chrome_options=self.options,
+                                       executable_path=" /home/ubuntu/flaskTest/chromedriver")
         self.homework_address = '&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100'
 
     def login(self, user_id, user_pw):
@@ -49,8 +52,6 @@ class Parse:
             except:
                 return 200
 
-
-
     def classroom(self):
         # 강의 코드 추출
         self.driver.switch_to_frame('main')
@@ -58,10 +59,10 @@ class Parse:
         soup = BeautifulSoup(r, "html.parser")
         select = soup.select_one('#\# > fieldset > select')
 
-        #for i in select.find_all('option')[1:]:
-        #    self.dict[i.get_text()] = i['value'].split(",")
+        for i in select.find_all('option')[1:]:
+            self.dict[i.get_text()] = i['value'].split(",")
 
-        # print(self.dict)
+        print(self.dict)
         # menu_00031 사이버 강의실 배너 메뉴번호
 
         self.driver.get(
@@ -82,10 +83,9 @@ class Parse:
             body = rows.find_elements_by_tag_name("td")
             for index, value in enumerate(body):
                 self.test_list.append(value.text)
-        n=8
+        n = 8
         new_list = []
         asd = [self.test_list[i * n:(i + 1) * n] for i in range((len(self.test_list) - 1 + n) // n)]
         for k in asd:
             new_list.append(' '.join(k))
-        return new_list
-
+        # return new_list
