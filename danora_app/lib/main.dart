@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' show parse;
 import 'dart:async';
+import 'dart:convert';
 
-void main(){
+void main() {
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +21,6 @@ class MyApp extends StatelessWidget {
 }
 
 class LogIn extends StatefulWidget {
-
   @override
     _LogInState createState() => _LogInState();
 }
@@ -30,6 +30,16 @@ class _LogInState extends State<LogIn> {
 
   TextEditingController id = TextEditingController();
   TextEditingController pw = TextEditingController();
+
+  Future login() async {
+    print('login start');
+    var res = await http.post(
+        Uri.parse('http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000'),
+        body: jsonEncode({'id':'201663035', 'pw':'Wjdtls753!'})
+    );
+    print(res.body);
+    return res.body;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +104,9 @@ class _LogInState extends State<LogIn> {
                                             fontSize: 15,
                                           ),
                                         ),
-                                        onPressed: () =>
+                                        onPressed: ()
                                         {
-                                          incorrectSnackbar(context)
+                                          login();
                                           // if(){
                                           //   correctSnackBar(context)
                                           // }else if(){
