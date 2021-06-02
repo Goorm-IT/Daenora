@@ -95,15 +95,17 @@ class _LogInState extends State<LogIn> {
                                             fontSize: 15,
                                           ),
                                         ),
-                                        onPressed: () =>
+                                        onPressed: ()
                                         {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => screenA())),
-                                          incorrectSnackbar(context)
-                                          // if(){
-                                          //   correctSnackBar(context)
-                                          // }else if(){
-                                          //   incorrectSnackbar(context)
-                                          // }
+                                          server.postReq(id, pw)
+                                              .then((res) {
+                                                if(res == '200'){
+                                                  correctSnackBar(context);
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                              }else if(res == '400'){
+                                                incorrectSnackbar(context);
+                                              }
+                                          });
                                         }
                                     ),
                                   )
@@ -144,20 +146,22 @@ void correctSnackBar(BuildContext context){
 }
 
 
-// class Server {
-//   Future<void> postReq() async {
-//     var url = Uri.parse(
-//         'http://ec2-52-78-97-124.ap-northeast-2.compute.amazonaws.com:5000');
-//     http.Response response = await http.post(url,
-//       headers: <String, String>{
-//         'Content-Type': 'application/x-www-form-urlencoded',
-//       },
-//       body: <String, String>{
-//         'id': 'id',
-//         'pw': 'pw'
-//       },);
-//   }
-// }
-//
-// Server server = Server();
+class Server {
+  Future<String> postReq(id, pw) async {
+    var url = Uri.parse(
+        'http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/login');
+    http.Response response = await http.post(url,
+      headers: <String, String>{
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: <String, String>{
+        'id': id,
+        'pw': pw
+      },);
+    print(response.body);
+    return response.body;
+  }
+}
+
+Server server = Server();
 
