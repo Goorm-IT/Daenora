@@ -9,7 +9,7 @@ router.post('/login', (req, res)=>{
     let pw = req.body['pw'] || 'Wjdtls753!';
 
     crawl.Login(id, pw).then((data)=>{
-        res.json(data);
+        res.send(data);
     });
 })
 
