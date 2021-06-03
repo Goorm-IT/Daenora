@@ -6,31 +6,24 @@ const { Type } = require('selenium-webdriver/lib/logging');
 const Crawl = function(){};
 
 Crawl.Login = async function(id, pw){
-  
+  var user_id = id
+  var user_pw = pw
+  let driver = await new Builder() 
+  .forBrowser('firefox')
+  .setFirefoxOptions( new firefox.Options()
+  .headless()
+  .windowSize({ width: 640, height: 480 })
+  .setPreference("general.useragent.override", "custom-user-agent") 
+  ).build();
   try{
-    var user_id = id
-    var user_pw = pw
-    let driver = await new Builder() 
-    .forBrowser('firefox')
-    .setFirefoxOptions( new firefox.Options()
-    .headless()
-    .windowSize({ width: 640, height: 480 })
-    .setPreference("general.useragent.override", "custom-user-agent") 
-    ).build();
-    
     console.log('에러');
     // 로그인
-    console.log('1')
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-    console.log('12')
     await (driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
-    console.log('123')
     // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
     // 아이디 비밀번호 입력
     await driver.findElement(By.id('id')).sendKeys(user_id);
-    console.log('1234')
     await driver.findElement(By.id('pw')).sendKeys(user_pw);
-    console.log('12345')
 
       // 로그인 불가능시 => 서버 오류로인한
     await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
@@ -43,21 +36,21 @@ Crawl.Login = async function(id, pw){
   }
   catch{
       //로그인 오류
+      await driver.close();
       console.log('로그인 실패')
       return '400';
   }
 }
 
 Crawl.getCourseList = async function(id, pw){
+  let driver = await new Builder() 
+  .forBrowser('firefox')
+  .setFirefoxOptions( new firefox.Options()
+  .headless()
+  .windowSize({ width: 640, height: 480 })
+  .setPreference("general.useragent.override", "custom-user-agent") 
+  ).build();
   try{
-    let driver = await new Builder() 
-    .forBrowser('firefox')
-    .setFirefoxOptions( new firefox.Options()
-    .headless()
-    .windowSize({ width: 640, height: 480 })
-    .setPreference("general.useragent.override", "custom-user-agent") 
-    ).build();
-
     // 로그인
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
     await (await driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
@@ -82,7 +75,7 @@ Crawl.getCourseList = async function(id, pw){
     }
   catch{
     //로그인 오류
-    driver.quit();
+    driver.close();
     return '400';
   }
 }
