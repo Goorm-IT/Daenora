@@ -6,26 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:danora_app/lecture.dart';
 
-void main(){
-  runApp(MaterialApp(
-    home:HomeScreen(),
-  ));
-}
 class HomeScreen extends StatefulWidget{
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-
-class Class{
-  String class_name;
-  String prof_name;
-  String class_code;
-
-  Class(this.class_name, this.prof_name, this.class_code);
-
-}
 class _HomeScreenState extends State<HomeScreen>{
 
   List _data = [];
@@ -44,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Class classToAdd = Class(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
+          Lecture classToAdd = Lecture(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
           print(classToAdd.class_name);
 
           setState(() {
@@ -73,11 +60,11 @@ class _HomeScreenState extends State<HomeScreen>{
           itemCount:_data.length,
           itemBuilder: (context, index){
 
-            Class classroom = _data[index];
+            Lecture classroom = _data[index];
             return GestureDetector(
               onTap: (){
                 print('test : ${classroom.class_code}');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
               },
               child: Card(
                   child: Column(

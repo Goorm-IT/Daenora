@@ -5,32 +5,33 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:danora_app/lecture.dart';
 
-void main(){
-  runApp(MaterialApp(
-    home:HomeScreen2(),
-  ));
-}
+
+
 class HomeScreen2 extends StatefulWidget{
+  Lecture now;
+  HomeScreen2(this.now);
   @override
-  _HomeScreen2State createState() => _HomeScreen2State();
+  _HomeScreen2State createState() => _HomeScreen2State(this.now);
 }
 
+//
+// class Lecture{
+//   String class_name;
+//   String prof_name;
+//   String class_code;
+//
+//   Lecture(this.class_name, this.prof_name, this.class_code);
+//
+// }
 
-class Class{
-  String class_name;
-  String prof_name;
-  String class_code;
-
-  Class(this.class_name, this.prof_name, this.class_code);
-
-}
 class _HomeScreen2State extends State<HomeScreen2>{
-
+  Lecture now;
+  _HomeScreen2State(this.now);
   List _data = [];
 
   _fetchData(){
-
 
     http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/class')).then((response) {
       String jsonString = response.body;
@@ -43,7 +44,7 @@ class _HomeScreen2State extends State<HomeScreen2>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Class classToAdd = Class(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
+          Lecture classToAdd = Lecture(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
           print(classToAdd.class_name);
 
           setState(() {
@@ -61,7 +62,7 @@ class _HomeScreen2State extends State<HomeScreen2>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classromm2~'),
+        title: Text('${this.now.class_name}~'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: (){
             _fetchData();
@@ -72,7 +73,7 @@ class _HomeScreen2State extends State<HomeScreen2>{
           itemCount:_data.length,
           itemBuilder: (context, index){
 
-            Class classroom = _data[index];
+            Lecture classroom = _data[index];
             return GestureDetector(
               onTap: (){
                 print('test : ${classroom.class_code}');
