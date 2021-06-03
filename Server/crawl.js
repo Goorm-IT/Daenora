@@ -19,8 +19,8 @@ Crawl.Login = async function(id, pw){
     await (driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
     // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
     // 아이디 비밀번호 입력
-    driver.findElement(By.id('id')).sendKeys(id);
-    driver.findElement(By.id('pw')).sendKeys(pw);
+    await driver.findElement(By.id('id')).sendKeys(id);
+    await driver.findElement(By.id('pw')).sendKeys(pw);
 
       // 로그인 불가능시 => 서버 오류로인한
     await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
