@@ -22,6 +22,8 @@ router.post('/lectures', (req, res)=>{
 
     crawl.getCourseList(id, pw).then((data)=>{
         res.json(data);
+    }).catch((err)=>{
+        console.log(err);
     });
 })
 
