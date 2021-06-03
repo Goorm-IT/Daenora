@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen>{
   _fetchData(){
 
 
-    http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/class')).then((response) {
+    http.get(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login')).then((response) {
       String jsonString = response.body;
 
       if (response.statusCode == 200){

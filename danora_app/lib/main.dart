@@ -151,7 +151,8 @@ void correctSnackBar(BuildContext context){
 class Server {
   Future<String> postReq(id, pw) async {
     var url = Uri.parse(
-        'http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/login');
+        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login');
+    print({'id':id, 'pw':pw});
     var response = await http.post(
       url,
       body: jsonEncode({'id':id, 'pw':pw})
