@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import 'package:danora_app/screenB.dart';
->>>>>>> develop
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -12,12 +8,12 @@ import 'dart:convert';
 
 void main(){
   runApp(MaterialApp(
-    home:HomeScreen(),
+    home:HomeScreen2(),
   ));
 }
-class HomeScreen extends StatefulWidget{
+class HomeScreen2 extends StatefulWidget{
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreen2State createState() => _HomeScreen2State();
 }
 
 
@@ -29,18 +25,14 @@ class Class{
   Class(this.class_name, this.prof_name, this.class_code);
 
 }
-class _HomeScreenState extends State<HomeScreen>{
+class _HomeScreen2State extends State<HomeScreen2>{
 
   List _data = [];
 
   _fetchData(){
 
 
-<<<<<<< HEAD
-    http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000')).then((response) {
-=======
     http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/class')).then((response) {
->>>>>>> develop
       String jsonString = response.body;
 
       if (response.statusCode == 200){
@@ -69,15 +61,11 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classroom~'),
+        title: Text('Classromm2~'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: (){
             _fetchData();
           }),
-<<<<<<< HEAD
-          RaisedButton(onPressed: (){Navigator.pop(context);})
-=======
->>>>>>> develop
         ],
       ),
       body: ListView.builder(
@@ -85,28 +73,18 @@ class _HomeScreenState extends State<HomeScreen>{
           itemBuilder: (context, index){
 
             Class classroom = _data[index];
-<<<<<<< HEAD
-            return Card(child: Column(
-                children: <Widget>[
-                  Text("강의명: ${classroom.class_name}"),
-                  Text("교수명: ${classroom.prof_name}"),
-                ]
-            ));
-=======
             return GestureDetector(
               onTap: (){
                 print('test : ${classroom.class_code}');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2()));
               },
               child: Card(
                   child: Column(
                     children: <Widget>[
-                      Text("강의명: ${classroom.class_name}"),
-                      Text("교수명: ${classroom.prof_name}"),
+                      Text("강의명 2: ${classroom.class_name}"),
+                      Text("교수명 2: ${classroom.prof_name}"),
                     ],
                   )),
             );
->>>>>>> develop
           }),
     );
   }
