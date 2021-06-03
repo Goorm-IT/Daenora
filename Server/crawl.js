@@ -37,6 +37,7 @@ Crawl.Login = async function(id, pw){
     }
   } 
   finally{ 
+    await driver.quit();
     console.log('로그인 성공')
     return '200';
   } 
