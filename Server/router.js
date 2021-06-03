@@ -10,6 +10,9 @@ router.post('/login', (req, res)=>{
 
     crawl.Login(id, pw).then((data)=>{
         res.send(data);
+    }).catch((err)=>{
+        console.log(err);
+        res.send('400');
     });
 })
 
