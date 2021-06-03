@@ -16,7 +16,6 @@ Crawl.Login = async function(id, pw){
   .setPreference("general.useragent.override", "custom-user-agent") 
   ).build();
   try{
-    console.log('에러');
     // 로그인
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
     await (driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
