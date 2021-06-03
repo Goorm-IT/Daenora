@@ -5,8 +5,9 @@ const router = express();
 
 // 로그인
 router.post('/login', (req, res)=>{
-    let id = req.body['id'];
-    let pw = req.body['pw'];
+    let id = req.body.id;
+    let pw = req.body.pw;
+    console.log()
 
     crawl.Login(id, pw).then((data)=>{
         res.send(data);
@@ -15,8 +16,8 @@ router.post('/login', (req, res)=>{
 
 // 강의 목록
 router.post('/lectures', (req, res)=>{
-    let id = req.body['id'];
-    let pw = req.body['pw'];
+    let id = req.body.id;
+    let pw = req.body.id;
 
     crawl.getCourseList(id, pw).then((data)=>{
         res.json(data);

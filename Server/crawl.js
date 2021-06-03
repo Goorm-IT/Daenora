@@ -6,8 +6,6 @@ const { Type } = require('selenium-webdriver/lib/logging');
 const Crawl = function(){};
 
 Crawl.Login = async function(id, pw){
-  var user_id = id
-  var user_pw = pw
   let driver = await new Builder() 
   .forBrowser('firefox')
   .setFirefoxOptions( new firefox.Options()
@@ -16,13 +14,14 @@ Crawl.Login = async function(id, pw){
   .setPreference("general.useragent.override", "custom-user-agent") 
   ).build();
   try{
+    console.log(id, pw);
     // 로그인
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
     await (driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
     // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
     // 아이디 비밀번호 입력
-    await driver.findElement(By.id('id')).sendKeys(user_id);
-    await driver.findElement(By.id('pw')).sendKeys(user_pw);
+    await driver.findElement(By.id('id')).sendKeys(id);
+    await driver.findElement(By.id('pw')).sendKeys(pw);
 
       // 로그인 불가능시 => 서버 오류로인한
     await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
@@ -36,7 +35,7 @@ Crawl.Login = async function(id, pw){
   catch{
       //로그인 오류
       await driver.close();
-      console.log('로그인 실패')
+      console.log('로그인 실패');
       return '400';
   }
 }
