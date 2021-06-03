@@ -5,8 +5,8 @@ const router = express();
 
 // 로그인
 router.post('/login', (req, res)=>{
-    let id = req.body['id'] || '201663035';
-    let pw = req.body['pw'] || 'Wjdtls753!';
+    let id = req.body['id'];
+    let pw = req.body['pw'];
 
     crawl.Login(id, pw).then((data)=>{
         res.send(data);
