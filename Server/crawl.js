@@ -25,9 +25,12 @@ Crawl.Login = async function(id, pw){
     try{
       // 로그인 불가능시 => 서버 오류로인한
       await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
+      console.log('로그인 중')
       await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
       await driver.navigate().refresh()
-      console.log('로그인 중')
+      await driver.quit();
+      console.log('로그인 성공')
+      return '200';
     }
     catch{
       //로그인 오류
@@ -37,10 +40,9 @@ Crawl.Login = async function(id, pw){
     }
   } 
   finally{ 
-    await driver.quit();
-    console.log('로그인 성공')
-    return '200';
+
   } 
+
 }
 
 Crawl.getCourseList = async function(id, pw){
@@ -65,6 +67,16 @@ Crawl.getCourseList = async function(id, pw){
         await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
         await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
         await driver.navigate().refresh()
+
+        var courseList = await (await driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
+        console.log('강의 목록 불러오는 중');
+        for(let i=1; i<courseList.length; i++) {
+          var course = await (await courseList[i].getAttribute('value')).split(',');
+          var courseId = await course[0];
+          var courseChef = await course[1];
+          var courseName = await courseList[i].getAttribute('text')
+            console.log(courseName, courseId, courseChef);
+            }
       }
       catch{
         // 로그인 재시작
@@ -78,15 +90,6 @@ Crawl.getCourseList = async function(id, pw){
     // for(let i=0; i<asd.length; i++) {
     //   console.log(await asd[i].getText(), await (await asd[i].getAttribute('href')).split("W'")[1].split(',')[0]);
     // }
-
-    var courseList = await (await driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
-    for(let i=1; i<courseList.length; i++) {
-      var course = await (await courseList[i].getAttribute('value')).split(',');
-      var courseId = await course[0];
-      var courseChef = await course[1];
-      var courseName = await courseList[i].getAttribute('text')
-        console.log(courseName, courseId, courseChef);
-        }
 
   }
 module.exports = Crawl;
