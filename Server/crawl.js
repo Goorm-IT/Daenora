@@ -8,6 +8,8 @@ const Crawl = function(){};
 Crawl.Login = async function(id, pw){
   
   try{
+    var user_id = id
+    var user_pw = pw
     let driver = await new Builder() 
     .forBrowser('firefox')
     .setFirefoxOptions( new firefox.Options()
@@ -25,9 +27,9 @@ Crawl.Login = async function(id, pw){
     console.log('123')
     // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
     // 아이디 비밀번호 입력
-    await driver.findElement(By.id('id')).sendKeys(id);
+    await driver.findElement(By.id('id')).sendKeys(user_id);
     console.log('1234')
-    await driver.findElement(By.id('pw')).sendKeys(pw);
+    await driver.findElement(By.id('pw')).sendKeys(user_pw);
     console.log('12345')
 
       // 로그인 불가능시 => 서버 오류로인한
@@ -41,7 +43,6 @@ Crawl.Login = async function(id, pw){
   }
   catch{
       //로그인 오류
-      driver.quit();
       console.log('로그인 실패')
       return '400';
   }
