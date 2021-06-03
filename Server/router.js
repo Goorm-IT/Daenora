@@ -31,3 +31,5 @@ router.post('/lectures', (req, res)=>{
 //         res.json(data);
 //     });
 // })
+
+module.exports = router;
