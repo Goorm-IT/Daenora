@@ -10,10 +10,8 @@ router.post('/login', (req, res)=>{
 
     crawl.Login(id, pw).then((data)=>{
         res.send(data);
-    }).catch((err)=>{
-        console.log(err);
-    });
-})
+    })
+});
 
 // 강의 목록
 router.post('/lectures', (req, res)=>{
@@ -22,10 +20,8 @@ router.post('/lectures', (req, res)=>{
 
     crawl.getCourseList(id, pw).then((data)=>{
         res.json(data);
-    }).catch((err)=>{
-        console.log(err);
-    });
-})
+    })
+});
 
 // router.post('/lectures', (req, res)=>{
 //     let id = req.body['id'];
