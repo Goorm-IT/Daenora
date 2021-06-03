@@ -16,29 +16,29 @@ Crawl.Login = async function(id, pw){
   try { 
     // 로그인
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-    await (await driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
+    await (driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
     // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
     // 아이디 비밀번호 입력
-    await driver.findElement(By.id('id')).sendKeys(id);
-    await driver.findElement(By.id('pw')).sendKeys(pw);
+    driver.findElement(By.id('id')).sendKeys(id);
+    driver.findElement(By.id('pw')).sendKeys(pw);
 
-    try{
       // 로그인 불가능시 => 서버 오류로인한
-      await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
-      console.log('로그인 중')
-      await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-      await driver.navigate().refresh()
-      await driver.quit();
-      console.log('로그인 성공')
-      return '200';
-    }
-    catch{
+    await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
+    console.log('로그인 중')
+    await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
+    await driver.navigate().refresh()
+    await driver.quit();
+    console.log('로그인 성공')
+    return '200';
+  }
+  catch{
       //로그인 오류
       await driver.quit();
       console.log('로그인 실패')
       return '400';
-    }
-  } 
+  }
+
+
   finally{ 
 
   } 
