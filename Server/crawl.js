@@ -28,6 +28,8 @@ Crawl.Login = async function(id, pw){
     console.log('로그인 중')
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
     await driver.navigate().refresh();
+    // 로그인 검증
+    await driver.findElement(By.xpath('/html/body/div[3]/div/div[1]/div[2]/div[1]/form/fieldset/div[2]/span'));
     await driver.quit();
     console.log('로그인 성공');
     return '200';
