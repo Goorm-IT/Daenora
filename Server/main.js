@@ -21,5 +21,5 @@ app.use('/', router);
 
 // start server
 app.listen(PORT, ()=> {
-    console.log(`server on : http://ec2-13-209-21-68.ap-northeast-2.compute.amazonaws.com:${PORT}`);
+    console.log(`server on : http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:${PORT}`);
 });
