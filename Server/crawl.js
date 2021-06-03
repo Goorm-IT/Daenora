@@ -6,13 +6,19 @@ const { Type } = require('selenium-webdriver/lib/logging');
 const Crawl = function(){};
 
 Crawl.Login = async function(id, pw){
-  let driver = await new Builder() 
-  .forBrowser('firefox')
-  .setFirefoxOptions( new firefox.Options()
-  .headless()
-  .windowSize({ width: 640, height: 480 })
-  .setPreference("general.useragent.override", "custom-user-agent") 
-  ).build();
+  try{
+    let driver = await new Builder() 
+    .forBrowser('firefox')
+    .setFirefoxOptions( new firefox.Options()
+    .headless()
+    .windowSize({ width: 640, height: 480 })
+    .setPreference("general.useragent.override", "custom-user-agent") 
+    ).build();
+  }
+  catch{
+    console.log('에러');
+  }
+
   try { 
     // 로그인
     await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
@@ -46,6 +52,7 @@ Crawl.Login = async function(id, pw){
 }
 
 Crawl.getCourseList = async function(id, pw){
+  try{
     let driver = await new Builder() 
     .forBrowser('firefox')
     .setFirefoxOptions( new firefox.Options()
@@ -53,6 +60,11 @@ Crawl.getCourseList = async function(id, pw){
     .windowSize({ width: 640, height: 480 })
     .setPreference("general.useragent.override", "custom-user-agent") 
     ).build();
+  }
+  catch{
+    console.log('에러')
+  }
+
     try { 
       // 로그인
       await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
