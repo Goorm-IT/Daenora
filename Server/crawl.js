@@ -6,7 +6,7 @@ const Crawl = function(){
     console.log('building web driver...');
     this.driver = await new Builder() 
     .forBrowser('firefox')
-    .headLess()
+    .headless()
     .setFirefoxOptions(
       new firefox.Options()
       .windowSize({ width: 640, height: 480 })
