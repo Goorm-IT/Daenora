@@ -12,7 +12,7 @@ router.post('/login', (req, res)=>{
     req.session['crawl'] = new Crawl();
     req.session['crawl'].init()
     .then(() => {
-        return global.crawl.login(id, pw);
+        return req.session['crawl'].login(id, pw);
     })
     .then((data) => {
         res.send(data);
