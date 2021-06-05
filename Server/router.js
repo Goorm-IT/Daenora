@@ -8,7 +8,7 @@ const router = express();
 router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-
+    console.log(type(id), id);
     global.crawl = new Crawl();
     global.crawl.init()
     .then(() => {
