@@ -26,6 +26,7 @@ router.post('/login', (req, res)=>{
 // 강의 목록
 router.post('/classes', (req, res)=>{
     let id = req.body.id;
+    console.log(id, req.session[id]);
     req.session[id].getCourseList()
     .then((data)=>{
         res.json(data);
