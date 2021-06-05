@@ -4,11 +4,11 @@ const firefox = require('selenium-webdriver/firefox');
 const Crawl = function(){
   this.init = async function() {
     console.log('building web driver...');
-    this.driver = await new Builder() 
+    this.driver = await new Builder()
     .forBrowser('firefox')
-    .headless()
     .setFirefoxOptions(
       new firefox.Options()
+      .headless()
       .windowSize({ width: 640, height: 480 })
       .setPreference("general.useragent.override", "custom-user-agent") 
     ).build();

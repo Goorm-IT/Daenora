@@ -3,15 +3,17 @@ const session = require('express-session');
 const Crawl = require('./crawl');
 const router = express();
 
-global.crawl = new Crawl();
-global.crawl.init();
 
 // 로그인
 router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
 
-    global.crawl.login(id, pw)
+    global.crawl = new Crawl();
+    global.crawl.init()
+    .then(() => {
+        return global.crawl.login(id, pw);
+    })
     .then((data) => {
         res.send(data);
     })
