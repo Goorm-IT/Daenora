@@ -57,7 +57,7 @@ Crawl.getCourseList = async function(driver){
     }
   catch{
     //로그인 오류
-    driver.close();
+    driver.quit();
     return '400';
   }
 }
