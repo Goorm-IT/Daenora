@@ -8,9 +8,9 @@ const router = express();
 router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-    console.log(type(id), id);
-    global.crawl = new Crawl();
-    global.crawl.init()
+    console.log(typeof(id), id);
+    req.session['crawl'] = new Crawl();
+    req.session['crawl'].init()
     .then(() => {
         return global.crawl.login(id, pw);
     })
@@ -21,7 +21,7 @@ router.post('/login', (req, res)=>{
 
 // 강의 목록
 router.get('/classes', (req, res)=>{
-    global.crawl.getCourseList()
+    req.session['crawl'].getCourseList()
     .then((data)=>{
         res.json(data);
     })
