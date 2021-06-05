@@ -20,7 +20,7 @@ router.post('/login', (req, res)=>{
 });
 
 // 강의 목록
-router.get('/lectures', (req, res)=>{
+router.get('/classes', (req, res)=>{
     global.crawl.getCourseList()
     .then((data)=>{
         res.json(data);
