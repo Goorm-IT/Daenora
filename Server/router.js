@@ -17,6 +17,10 @@ router.post('/login', (req, res)=>{
     .then((data) => {
         res.send(data);
     })
+    .catch((e) => {
+        console.log(e);
+        res.send('400');
+    })
 });
 
 // 강의 목록
