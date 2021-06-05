@@ -1,26 +1,26 @@
 const express = require('express');
 const session = require('express-session');
-const crawl = require('./crawl');
+const Crawl = require('./crawl');
 const router = express();
 
+global.crawl = new Crawl();
+global.crawl.init();
 
 // 로그인
 router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
 
-    crawl.Login(id, pw, req.session).then((data)=>{
+    global.crawl.login(id, pw)
+    .then((data) => {
         res.send(data);
-        console.log(req.session['driver']);
     })
 });
 
 // 강의 목록
 router.get('/lectures', (req, res)=>{
-    let id = req.body.id;
-    let pw = req.body.id;
-
-    crawl.getCourseList(req.session['driver']).then((data)=>{
+    global.crawl.getCourseList()
+    .then((data)=>{
         res.json(data);
     })
 });
