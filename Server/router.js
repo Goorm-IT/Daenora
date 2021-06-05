@@ -11,6 +11,7 @@ router.post('/login', (req, res)=>{
 
     crawl.Login(id, pw, req.session).then((data)=>{
         res.send(data);
+        console.log(req.session['driver']);
     })
 });
 
