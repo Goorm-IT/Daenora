@@ -9,10 +9,10 @@ router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
     console.log(typeof(id), id);
-    req.session['crawl'] = new Crawl();
-    req.session['crawl'].init()
+    req.session[id] = new Crawl();
+    req.session[id].init()
     .then(() => {
-        return req.session['crawl'].login(id, pw);
+        return req.session[id].login(id, pw);
     })
     .then((data) => {
         res.send(data);
@@ -24,8 +24,9 @@ router.post('/login', (req, res)=>{
 });
 
 // 강의 목록
-router.get('/classes', (req, res)=>{
-    req.session['crawl'].getCourseList()
+router.post('/classes', (req, res)=>{
+    let id = req.body.id;
+    req.session[id].getCourseList()
     .then((data)=>{
         res.json(data);
     })
