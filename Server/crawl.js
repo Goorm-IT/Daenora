@@ -5,7 +5,7 @@ const { Type } = require('selenium-webdriver/lib/logging');
 
 const Crawl = function(){};
 
-Crawl.Login = async function(id, pw){
+Crawl.Login = async function(id, pw, session){
   let driver = await new Builder() 
   .forBrowser('firefox')
   .setFirefoxOptions( new firefox.Options()
@@ -30,7 +30,8 @@ Crawl.Login = async function(id, pw){
     await driver.navigate().refresh();
     // 로그인 검증
     await driver.findElement(By.xpath('/html/body/div[3]/div/div[1]/div[2]/div[1]/form/fieldset/div[2]/span'));
-    await driver.quit();
+    
+    session['driver'] = driver;
     console.log('로그인 성공');
     return '200';
   }
@@ -42,27 +43,8 @@ Crawl.Login = async function(id, pw){
   }
 }
 
-Crawl.getCourseList = async function(id, pw){
-  let driver = await new Builder() 
-  .forBrowser('firefox')
-  .setFirefoxOptions( new firefox.Options()
-  .headless()
-  .windowSize({ width: 640, height: 480 })
-  .setPreference("general.useragent.override", "custom-user-agent") 
-  ).build();
+Crawl.getCourseList = async function(driver){
   try{
-    // 로그인
-    await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-    await (await driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
-    // await driver.wait(until.elementLocated(By.xpath('//*[@id="id"]')));
-    // 아이디 비밀번호 입력
-    await driver.findElement(By.id('id')).sendKeys(id);
-    await driver.findElement(By.id('pw')).sendKeys(pw);
-
-    await driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
-    await driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-    await driver.navigate().refresh()
-
     var courseList = await (await driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
     console.log('강의 목록 불러오는 중');
     for(let i=1; i<courseList.length; i++) {

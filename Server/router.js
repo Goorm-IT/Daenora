@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const crawl = require('./crawl');
 const router = express();
 
@@ -7,30 +8,20 @@ const router = express();
 router.post('/login', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-    console.log()
 
-    crawl.Login(id, pw).then((data)=>{
+    crawl.Login(id, pw, req.session).then((data)=>{
         res.send(data);
     })
 });
 
 // 강의 목록
-router.post('/lectures', (req, res)=>{
+router.get('/lectures', (req, res)=>{
     let id = req.body.id;
     let pw = req.body.id;
 
-    crawl.getCourseList(id, pw).then((data)=>{
+    crawl.getCourseList(req.session['driver']).then((data)=>{
         res.json(data);
     })
 });
-
-// router.post('/lectures', (req, res)=>{
-//     let id = req.body['id'];
-//     let pw = req.body['pw'];
-
-//     crawl.getCourseList(id, pw).then((data)=>{
-//         res.json(data);
-//     });
-// })
 
 module.exports = router;
