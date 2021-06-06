@@ -1,36 +1,35 @@
 const express = require('express');
 const session = require('express-session');
-const Crawl = require('./crawl');
+const CrawlWeb = require('./crawl');
 const router = express();
 
+CrawlWeb.open();
 
 // 로그인
-router.post('/login', (req, res)=>{
+router.post('/login', async (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-    console.log(typeof(id), id);
-    req.session[id] = new Crawl();
-    req.session[id].init()
-    .then(() => {
-        return req.session[id].login(id, pw);
-    })
-    .then((data) => {
-        res.send(data);
-    })
-    .catch((e) => {
-        console.log(e);
+    try {
+        await CrawlWeb.login(id, pw);
+        res.send('200');
+    }
+    catch {
         res.send('400');
-    })
+    }
 });
 
 // 강의 목록
-router.post('/classes', (req, res)=>{
+router.post('/classes', async (req, res)=>{
     let id = req.body.id;
-    console.log(id, req.session[id]);
-    req.session[id].getCourseList()
-    .then((data)=>{
+    let pw = req.body.pw;
+    try {
+        await CrawlWeb.login(id, pw);
+        let data = await CrawlWeb.getCourseList();
         res.json(data);
-    })
+    }
+    catch (e) {
+        res.json([]);
+    }
 });
 
 module.exports = router;

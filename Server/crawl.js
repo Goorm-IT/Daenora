@@ -1,39 +1,60 @@
 const {Builder, By, Key, until} = require('selenium-webdriver'); 
 const firefox = require('selenium-webdriver/firefox');
 
-const Crawl = function(){
-  this.init = async function() {
-    console.log('building web driver...');
-    this.driver = await new Builder()
-    .forBrowser('firefox')
-    .setFirefoxOptions(
-      new firefox.Options()
-      .headless()
-      .windowSize({ width: 640, height: 480 })
-      .setPreference("general.useragent.override", "custom-user-agent") 
-    ).build();
-    console.log('building web driver complete...');
-  }
-
-  this.login = async function(id, pw) {
+const CrawlWeb = {
+  driver : undefined,
+  open : async function() {
+    try{
+      console.log('building webdriver...');
+      this.driver = await new Builder()
+      .forBrowser('firefox')
+      .setFirefoxOptions(
+        new firefox.Options()
+        .headless()
+        .windowSize({ width: 640, height: 480 })
+        .setPreference("general.useragent.override", "custom-user-agent") 
+      ).build();
+      console.log('build webdriver complete...');
+    }
+    catch (e){
+      console.log('fail to build webdriver...');
+      console.log(e);
+    }
+  },
+  close : async function() {
     try {
-      if(this.driver == undefined) throw 'please Crawl.init first';
+      if(this.driver == undefined) throw 'driver is already closed';
+      await this.driver.quit();
+      console.log('close webdriver complete');
+    }
+    catch (e) {
+      console.log(e);
+    }
+    this.driver = undefined;
+  },
+  login : async function(id, pw) {
+    try {
+      if(this.driver == undefined) throw 'please open the driver first';
+
       console.log('홈페이지 여는중');
       await this.driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-      await (this.driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
+
+      try { // 이미 로그인 되어 있을 경우 로그아웃
+        await this.driver.findElement(By.className('logoutBtn')).click();
+        console.log('로그아웃 성공');
+      }
+      catch {}
+      try { // 팝업 창 닫기
+        await (this.driver.findElement(By.xpath('/html/body/div[4]/div[1]/button'))).click();
+      }
+      catch {}
       
-      // 아이디 비밀번호 입력
-      console.log('로그인 중');
+      // 로그인
+      console.log(`'${id}'님의 로그인 시도 중`);
       await this.driver.findElement(By.id('id')).sendKeys(id);
-      await this.driver.findElement(By.id('pw')).sendKeys(pw);
-  
-        // 로그인 불가능시 => 서버 오류로인한
-      await this.driver.findElement(By.linkText('로그인')).sendKeys(Key.ENTER);
-      //await this.driver.get('https://cyber.anyang.ac.kr/Main.do?cmd=viewHome&userDTO.localeKey=ko');
-      await this.driver.navigate().refresh();
-      // 로그인 검증
-      await this.driver.findElement(By.xpath('/html/body/div[3]/div/div[1]/div[2]/div[1]/form/fieldset/div[2]/span'));
-      
+      await this.driver.findElement(By.id('pw')).sendKeys(pw, Key.ENTER);
+
+      //await this.driver.findElement(By.className('loginBtn'));
       console.log('로그인 성공');
       return '200';
     }
@@ -41,19 +62,17 @@ const Crawl = function(){
         //로그인 오류
         console.log(e);
         console.log('로그인 실패');
-        return '400';
+        throw '로그인 실패';
     }
-  }
-
-  this.getCourseList = async function() {
+  },
+  getCourseList : async function() {
     let courses = [];
     try{
-      if(this.driver == undefined) throw 'please Crawl.init first';
-
+      if(this.driver == undefined) throw 'please open the driver first';
       console.log('강의 목록 불러오는 중');
-      let courseList = await (await this.driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
+      let courseList = await this.driver.findElement(By.className('default')).findElements(By.tagName('option'));
       for(let i=1; i<courseList.length; i++) {
-        let course = await (await courseList[i].getAttribute('value')).split(',');
+        let course = (await courseList[i].getAttribute('value')).split(',');
         courses.push({
           'classId': course[0],
           'className': await courseList[i].getAttribute('text'),
@@ -64,25 +83,11 @@ const Crawl = function(){
       return courses;
     }
     catch (e){
-      //로그인 오류
       console.log(e);
       return '400';
-    }
-  }
-
-  this.close = async function() {
-    try {
-      if(this.driver == undefined) throw 'driver is already closed';
-      await this.driver.quit();
-    }
-    catch (e) {
-      console.log(e);
-    }
-    finally {
-      this.driver = undefined;
     }
   }
 };
 
 
-module.exports = Crawl;
+module.exports = CrawlWeb;
