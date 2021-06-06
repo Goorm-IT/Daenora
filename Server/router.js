@@ -22,16 +22,16 @@ router.post('/login', async (req, res)=>{
 router.post('/classes', async (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-    CrawlWeb.open();
     try {
+        await CrawlWeb.open();
         await CrawlWeb.login(id, pw);
         let data = await CrawlWeb.getCourseList();
         res.json(data);
+        CrawlWeb.close();
     }
     catch (e) {
         res.json([]);
     }
-    CrawlWeb.close();
 });
 
 module.exports = router;
