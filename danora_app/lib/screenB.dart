@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'lecture.dart';
+import 'assignment.dart';
 
 
 
@@ -16,15 +17,6 @@ class HomeScreen2 extends StatefulWidget{
   _HomeScreen2State createState() => _HomeScreen2State(this.now);
 }
 
-//
-// class Lecture{
-//   String class_name;
-//   String prof_name;
-//   String class_code;
-//
-//   Lecture(this.class_name, this.prof_name, this.class_code);
-//
-// }
 
 class _HomeScreen2State extends State<HomeScreen2>{
   Lecture now;
@@ -33,7 +25,13 @@ class _HomeScreen2State extends State<HomeScreen2>{
 
   _fetchData(){
 
-    http.get(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes')).then((response) {
+    http.post(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/assignments'),
+        headers: {
+          'Content-type':'application/json',
+        },
+        body: jsonEncode({'id':'201663035', 'pw':'Wjdtls753!','classId':'20211AA10660130800200'})
+
+    ).then((response) {
       String jsonString = response.body;
 
       if (response.statusCode == 200){
@@ -44,8 +42,7 @@ class _HomeScreen2State extends State<HomeScreen2>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Lecture classToAdd = Lecture(classroom["className"], classroom["profName"], classroom["class_Id"]);
-          print(classToAdd.className);
+          Assignment classToAdd = Assignment(classroom["index"], classroom["assignmentName"], classroom["startDate"], classroom["endDate"], classroom["submission"]);
 
           setState(() {
             _data.add(classToAdd);
@@ -73,21 +70,25 @@ class _HomeScreen2State extends State<HomeScreen2>{
         ],
       ),
       body: ListView.builder(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
           itemCount:_data.length,
           itemBuilder: (context, index){
 
-            Lecture classroom = _data[index];
-            return GestureDetector(
+            Assignment classroom = _data[index];
+            return InkWell(
               onTap: (){
-                print('test : ${classroom.classId}');
+                print('test : ${classroom.assignmentName}');
               },
-              child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      Text("강의명 2: ${classroom.className}"),
-                      Text("교수명 2: ${classroom.profName}"),
-                    ],
-                  )),
+              child: Card(child:ListTile(
+                      title: Text("${classroom.assignmentName}",style: TextStyle(color: Color(0xff304f94),fontSize: 17, fontWeight: FontWeight.bold)),
+                      subtitle: Text("${classroom.startDate} ~ ${classroom.endDate}", style: TextStyle(fontSize: 13, color: Colors.grey[700]),),
+                      trailing: Text("${classroom.submission}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                  ),
+              elevation: 2.0,
+              ),
             );
           }),
     );
