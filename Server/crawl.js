@@ -53,7 +53,7 @@ const CrawlWeb = {
       console.log(`'${id}'님의 로그인 시도 중`);
       await this.driver.findElement(By.id('id')).sendKeys(id);
       await this.driver.findElement(By.id('pw')).sendKeys(pw, Key.ENTER);
-
+      await this.driver.navigate().refresh();
       //await this.driver.findElement(By.className('loginBtn'));
       console.log('로그인 성공');
       return '200';
@@ -70,7 +70,7 @@ const CrawlWeb = {
     try{
       if(this.driver == undefined) throw 'please open the driver first';
       console.log('강의 목록 불러오는 중');
-      let courseList = await this.driver.findElement(By.className('default')).findElements(By.tagName('option'));
+      var courseList = await (await this.driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
       for(let i=1; i<courseList.length; i++) {
         let course = (await courseList[i].getAttribute('value')).split(',');
         courses.push({
