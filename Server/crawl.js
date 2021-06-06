@@ -10,7 +10,7 @@ const CrawlWeb = {
       .forBrowser('firefox')
       .setFirefoxOptions(
         new firefox.Options()
-        .headless()
+        //.headless()
         .windowSize({ width: 640, height: 480 })
         .setPreference("general.useragent.override", "custom-user-agent") 
       ).build();
@@ -70,7 +70,7 @@ const CrawlWeb = {
     try{
       if(this.driver == undefined) throw 'please open the driver first';
       console.log('강의 목록 불러오는 중');
-      var courseList = await (await this.driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
+      let courseList = await (await this.driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
       for(let i=1; i<courseList.length; i++) {
         let course = (await courseList[i].getAttribute('value')).split(',');
         courses.push({

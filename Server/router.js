@@ -3,7 +3,6 @@ const session = require('express-session');
 const CrawlWeb = require('./crawl');
 const router = express();
 
-CrawlWeb.open();
 
 // 로그인
 router.post('/login', async (req, res)=>{
@@ -16,12 +15,14 @@ router.post('/login', async (req, res)=>{
     catch {
         res.send('400');
     }
+    res.send('1234');
 });
 
 // 강의 목록
 router.post('/classes', async (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
+    CrawlWeb.open();
     try {
         await CrawlWeb.login(id, pw);
         let data = await CrawlWeb.getCourseList();
@@ -30,6 +31,7 @@ router.post('/classes', async (req, res)=>{
     catch (e) {
         res.json([]);
     }
+    CrawlWeb.close();
 });
 
 module.exports = router;
