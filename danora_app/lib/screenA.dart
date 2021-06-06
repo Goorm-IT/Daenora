@@ -5,54 +5,43 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:page_transition/page_transition.dart';
 
 import 'lecture.dart';
+import 'assignment.dart';
 
 class HomeScreen extends StatefulWidget{
+  String id, pw;
   List classes;
-  HomeScreen(this.classes);
+  HomeScreen(this.id, this.pw, this.classes);
   @override
-  _HomeScreenState createState() => _HomeScreenState(this.classes);
+  _HomeScreenState createState() => _HomeScreenState(this.id, this.pw, this.classes);
 }
 
 class _HomeScreenState extends State<HomeScreen>{
+  String id, pw;
+  List classes;
+  _HomeScreenState(this.id, this.pw, this.classes);
 
-  List _data;
-  _HomeScreenState(this._data);
-
-  _fetchData(){
-
-
-    http.post(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes'),
+  Future<List> postReq(id, pw, classId) async {
+    var url = Uri.parse(
+        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/assignments');
+    var response = await http.post(
+        url,
         headers: {
           'Content-type':'application/json',
         },
+        body: jsonEncode({'id':id, 'pw':pw, 'classId': classId})
+    );
 
-        body: jsonEncode({'id':'201663035', 'pw':'Wjdtls753!'})
-
-        ).then((response) {
-      String jsonString = response.body;
-
-      if (response.statusCode == 200){
-        String jsonString = response.body;
-        print(jsonString);
-
-        List classes = jsonDecode(jsonString);
-
-        for (int i=0; i<classes.length;i++){
-          var classroom = classes[i];
-          Lecture classToAdd = Lecture(classroom["className"], classroom["profName"], classroom["classId"]);
-          print(classToAdd.className);
-
-          setState(() {
-            _data.add(classToAdd);
-          });
-        }
-      }
-      else{
-        print("Error!!");
-      }
-    });
+    List json = jsonDecode(response.body);
+    List assigns = [];
+    for (int i=0; i<json.length;i++) {
+      var assign = json[i];
+      assigns.add(Assignment(
+          assign["index"], assign["assignmentName"], assign["startDate"], assign["endDate"], assign["submission"]));
+    }
+    return assigns;
   }
 
   @override
@@ -71,9 +60,9 @@ class _HomeScreenState extends State<HomeScreen>{
       ),
       body: ListView.builder(
           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-          itemCount:_data.length,
+          itemCount:classes.length,
           itemBuilder: (context, index){
-            Lecture classroom = _data[index];
+            Lecture classroom = classes[index];
 
             // return ListTile(
             //   onTap: (){
@@ -88,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen>{
             return InkWell(
               onTap: (){
                 print('test : ${classroom.classId}');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom, )));
               },
               child: Card(child:ListTile(
                   title:  Text("${classroom.className}",style: TextStyle(color:Color(0xff304f94) ,  fontSize: 17, fontWeight: FontWeight.bold),),
@@ -97,7 +86,13 @@ class _HomeScreenState extends State<HomeScreen>{
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-
+                onTap: () async {
+                  var assigns = await this.postReq(this.id, this.pw, classroom.classId);
+                    Navigator.push(context, PageTransition(
+                        type: PageTransitionType.leftToRightWithFade,
+                        child: HomeScreen2(classroom, assigns)
+                    ));
+                },
             ),
                 elevation: 2.0,
             ));

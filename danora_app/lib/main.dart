@@ -127,12 +127,8 @@ class _LogInState extends State<LogIn> {
                                               correctSnackBar(context);
                                               await Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.push(context, PageTransition(
                                                   type: PageTransitionType.leftToRightWithFade,
-                                                  child: HomeScreen(classes)
+                                                  child: HomeScreen(id.text, pw.text, classes)
                                               )));
-                                              // Navigator.push(context, PageTransition(
-                                              //   type: PageTransitionType.leftToRightWithFade,
-                                              //   child: HomeScreen()
-                                              // ));
                                             }else {
                                               incorrectSnackbar(context);
                                             }
