@@ -54,13 +54,15 @@ class _LogInState extends State<LogIn> {
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Padding(padding: EdgeInsets.only(top: 80,bottom: 80)),
+                  Padding(padding: EdgeInsets.only(top: 50,bottom: 50)),
                   Center(
-                    child: Image(
+                    child: Container(
+                      margin: EdgeInsets.only(top:50),
+                      child: Image(
                       image: AssetImage('images/logo1.png'),
                       width: 400.0,
                       height: 200.0,
-
+                    ),
                     ),
                   ),
                   Form(
@@ -75,7 +77,7 @@ class _LogInState extends State<LogIn> {
                               )
                           ),
                           child: Container(
-                              padding: EdgeInsets.all(100.0),
+                              padding: EdgeInsets.all(70.0),
                               child: Column(
                                   children: <Widget>[
                                     TextField(
