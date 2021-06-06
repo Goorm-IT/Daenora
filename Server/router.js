@@ -36,7 +36,7 @@ router.post('/classes', async (req, res)=>{
 router.post('/assignments', async (req, res)=>{
     let id = req.body.id;
     let pw = req.body.pw;
-    let courseId = req.body.courseId;
+    let courseId = req.body.classId;
     try {
         await CrawlWeb.login(id, pw);
         let data = await CrawlWeb.getAssignments(courseId);
