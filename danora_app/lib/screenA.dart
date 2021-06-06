@@ -88,8 +88,8 @@ class _HomeScreenState extends State<HomeScreen>{
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
               },
               child: Card(child:ListTile(
-                  title:  Text("강의명 : ${classroom.className}",style: TextStyle(color:Color(0xff304f94) ,  fontSize: 17, fontWeight: FontWeight.bold),),
-                  subtitle: Text("교수명 : ${classroom.profName}",style: TextStyle(fontSize: 13,color: Colors.grey[700])),
+                  title:  Text(" ${classroom.className}",style: TextStyle(color:Color(0xff304f94) ,  fontSize: 17, fontWeight: FontWeight.bold),),
+                  subtitle: Text(" ${classroom.profName}",style: TextStyle(fontSize: 13,color: Colors.grey[700])),
                   trailing: Icon(Icons.open_in_new,color:Color(0xff304f94) ,),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
