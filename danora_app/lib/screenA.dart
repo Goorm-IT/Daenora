@@ -20,7 +20,14 @@ class _HomeScreenState extends State<HomeScreen>{
   _fetchData(){
 
 
-    http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/class')).then((response) {
+    http.post(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes'),
+        headers: {
+          'Content-type':'application/json',
+        },
+
+        body: jsonEncode({'id':'201663035', 'pw':'Wjdtls753!'})
+
+        ).then((response) {
       String jsonString = response.body;
 
       if (response.statusCode == 200){
@@ -31,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Lecture classToAdd = Lecture(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
-          print(classToAdd.class_name);
+          Lecture classToAdd = Lecture(classroom["className"], classroom["profName"], classroom["classId"]);
+          print(classToAdd.className);
 
           setState(() {
             _data.add(classToAdd);
@@ -49,7 +56,10 @@ class _HomeScreenState extends State<HomeScreen>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classroom~'),
+        title: Text('내 강의실',style: TextStyle( fontWeight: FontWeight.bold),),
+        elevation: 0.0,
+        centerTitle: true,
+        backgroundColor: Color(0xff304f94),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: (){
             _fetchData();
@@ -57,23 +67,37 @@ class _HomeScreenState extends State<HomeScreen>{
         ],
       ),
       body: ListView.builder(
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
           itemCount:_data.length,
           itemBuilder: (context, index){
-
             Lecture classroom = _data[index];
-            return GestureDetector(
+
+            // return ListTile(
+            //   onTap: (){
+            //       print('test : ${classroom.classId}');
+            //       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
+            //     },
+            //
+            //   title:  Text("강의명: ${classroom.className}"),
+            //   subtitle: Text("교수명: ${classroom.profName}"),
+            //   trailing: Icon(Icons.check_circle),
+            // );
+            return InkWell(
               onTap: (){
-                print('test : ${classroom.class_code}');
+                print('test : ${classroom.classId}');
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
               },
-              child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      Text("강의명: ${classroom.class_name}"),
-                      Text("교수명: ${classroom.prof_name}"),
-                    ],
-                  )),
-            );
+              child: Card(child:ListTile(
+                  title:  Text("강의명 : ${classroom.className}",style: TextStyle(color:Color(0xff304f94) ,  fontSize: 17, fontWeight: FontWeight.bold),),
+                  subtitle: Text("교수명 : ${classroom.profName}",style: TextStyle(fontSize: 13,color: Colors.grey[700])),
+                  trailing: Icon(Icons.open_in_new,color:Color(0xff304f94) ,),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+
+            ),
+                elevation: 2.0,
+            ));
           }),
     );
   }

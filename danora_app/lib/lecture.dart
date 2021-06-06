@@ -1,8 +1,8 @@
 class Lecture {
-  String class_name;
-  String prof_name;
-  String class_code;
+  String className;
+  String profName;
+  String classId;
 
-  Lecture(this.class_name, this.prof_name, this.class_code);
+  Lecture(this.className, this.profName, this.classId);
 
 }

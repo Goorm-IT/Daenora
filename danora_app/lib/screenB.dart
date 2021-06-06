@@ -33,7 +33,7 @@ class _HomeScreen2State extends State<HomeScreen2>{
 
   _fetchData(){
 
-    http.get(Uri.parse('http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/class')).then((response) {
+    http.get(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes')).then((response) {
       String jsonString = response.body;
 
       if (response.statusCode == 200){
@@ -44,8 +44,8 @@ class _HomeScreen2State extends State<HomeScreen2>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Lecture classToAdd = Lecture(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
-          print(classToAdd.class_name);
+          Lecture classToAdd = Lecture(classroom["className"], classroom["profName"], classroom["class_Id"]);
+          print(classToAdd.className);
 
           setState(() {
             _data.add(classToAdd);
@@ -62,7 +62,10 @@ class _HomeScreen2State extends State<HomeScreen2>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('${this.now.class_name}~'),
+        title: Text('${this.now.className}', style: TextStyle(fontWeight: FontWeight.bold),),
+        elevation: 0.0,
+        centerTitle: true,
+        backgroundColor: Color(0xff304f94),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: (){
             _fetchData();
@@ -76,13 +79,13 @@ class _HomeScreen2State extends State<HomeScreen2>{
             Lecture classroom = _data[index];
             return GestureDetector(
               onTap: (){
-                print('test : ${classroom.class_code}');
+                print('test : ${classroom.classId}');
               },
               child: Card(
                   child: Column(
                     children: <Widget>[
-                      Text("강의명 2: ${classroom.class_name}"),
-                      Text("교수명 2: ${classroom.prof_name}"),
+                      Text("강의명 2: ${classroom.className}"),
+                      Text("교수명 2: ${classroom.profName}"),
                     ],
                   )),
             );

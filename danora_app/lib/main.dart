@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
-
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:page_transition/page_transition.dart';
 
 void main(){
   runApp(MyApp());
@@ -35,20 +36,31 @@ class _LogInState extends State<LogIn> {
   TextEditingController id = TextEditingController();
   TextEditingController pw = TextEditingController();
 
+  ProgressDialog pr;
+
+  void show() async{
+    pr.show();
+    Future.delayed(Duration(seconds: 2),).then((value){
+      pr.hide();
+     
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    pr = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: true, showLogs: true );
     return Scaffold(
       body: Builder(
           builder: (context) {
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Padding(padding: EdgeInsets.only(top: 50)),
+                  Padding(padding: EdgeInsets.only(top: 80,bottom: 80)),
                   Center(
                     child: Image(
-                      image: AssetImage(''),
-                      width: 170.0,
-                      height: 190.0,
+                      image: AssetImage('images/logo1.png'),
+                      width: 400.0,
+                      height: 200.0,
+
                     ),
                   ),
                   Form(
@@ -69,9 +81,10 @@ class _LogInState extends State<LogIn> {
                                     TextField(
                                       controller: id,
                                       decoration: InputDecoration(
-                                        labelText: "학번",
-                                        hintText: 'ex)201663035',
+                                        labelText: "ID",
+                                        hintText: 'ex) 20211234',
                                         border: OutlineInputBorder(),
+                                        prefixIcon: Icon(Icons.perm_identity),
                                       ),
                                       keyboardType: TextInputType.text,
                                     ),
@@ -79,8 +92,9 @@ class _LogInState extends State<LogIn> {
                                     TextField(
                                       controller: pw,
                                       decoration: InputDecoration(
-                                        labelText: "비밀번호",
+                                        labelText: "PW",
                                         border: OutlineInputBorder(),
+                                          prefixIcon: Icon(Icons.password_sharp)
                                       ),
                                       keyboardType: TextInputType.text,
                                       obscureText: true,
@@ -96,15 +110,26 @@ class _LogInState extends State<LogIn> {
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 15,
+                                              fontFamily: "Jalnan"
+
                                             ),
+
                                           ),
                                           onPressed: () async
                                           {
+                                            //show();
                                             var res = await server.postReq(id.text, pw.text);
                                             print(int.parse(res) == 200);
                                             if(res == '200'){
                                               correctSnackBar(context);
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                              await Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.push(context, PageTransition(
+                                                  type: PageTransitionType.leftToRightWithFade,
+                                                  child: HomeScreen()
+                                              )));
+                                              // Navigator.push(context, PageTransition(
+                                              //   type: PageTransitionType.leftToRightWithFade,
+                                              //   child: HomeScreen()
+                                              // ));
                                             }else {
                                               incorrectSnackbar(context);
                                             }
@@ -151,9 +176,12 @@ void correctSnackBar(BuildContext context){
 class Server {
   Future<String> postReq(id, pw) async {
     var url = Uri.parse(
-        'http://ec2-13-125-126-215.ap-northeast-2.compute.amazonaws.com:4000/login');
+        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login');
     var response = await http.post(
       url,
+      headers: {
+        'Content-type':'application/json',
+      },
       body: jsonEncode({'id':id, 'pw':pw})
     );
     // http.Response response = await http.post(url,
@@ -168,3 +196,5 @@ class Server {
 }
 
 Server server = Server();
+
+
