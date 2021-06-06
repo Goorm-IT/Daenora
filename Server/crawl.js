@@ -87,22 +87,34 @@ const CrawlWeb = {
       throw '400';
     }
   },
-  getAssignments : async function() {
-    let assignments = [];
+  getAssignments : async function(courseId) {
     try{
       if(this.driver == undefined) throw 'please open the driver first';
       console.log('강의 목록 불러오는 중');
-      //let courseId = '20211A500047130800300';
-      let courseId = '20211AE10227130800300';
       await this.driver.get(`https://cyber.anyang.ac.kr/Learner.do?cmd=viewLearnerStatusList&courseDTO.courseId=${courseId}&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100`);
-      let courseList = await (await this.driver.findElements(By.className('boardListBasic'))).findElements(By.tagName('option'));
-      for(let i=1; i<courseList.length; i++) {
-        let course = (await courseList[i].getAttribute('value')).split(',');
-        courses.push({
-          'classId': course[0],
-          'className': await courseList[i].getAttribute('text'),
-          'profName':course[1]
-        });
+
+      let assignTable = await this.driver.findElement(By.className('boardListBasic'));
+      let assignTbody = await assignTable.findElement(By.tagName('tbody'));
+      let assignElements = await assignTbody.findElements(By.tagName('tr'));
+      let assignments = [];
+      for(let i=0; i<assignElements.length; i++) {
+        let assign = await assignElements[i].findElements(By.tagName('td'));
+        let date = await assign[2].getText();
+        date = date.split(' ~ ')
+        let data = {
+          index : await assign[0].getText(),
+          assignmentName : await assign[1].getText(),
+          startDate : date[0],
+          endDate : date[1],
+          submission : await assign[3].getText()
+        }
+        
+        assignments.push(data);
+        // courses.push({
+        //   'classId': course[0],
+        //   'className': await assignElements[i].getAttribute('text'),
+        //   'profName':course[1]
+        // });
       }
       console.log('강의 목록 로드 완료');
       return assignments;
