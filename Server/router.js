@@ -27,7 +27,7 @@ router.post('/classes', async (req, res)=>{
         await CrawlWeb.login(id, pw);
         let data = await CrawlWeb.getCourseList();
         res.json(data);
-        CrawlWeb.close();
+        await CrawlWeb.close();
     }
     catch (e) {
         res.json([]);
