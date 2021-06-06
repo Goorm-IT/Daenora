@@ -4,6 +4,7 @@ import 'package:danora_app/screenA.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:danora_app/lecture.dart';
 import 'dart:async';
 
 
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
 }
 
 class LogIn extends StatefulWidget {
-
   @override
   _LogInState createState() => _LogInState();
 }
@@ -101,10 +101,10 @@ class _LogInState extends State<LogIn> {
                                           onPressed: () async
                                           {
                                             var res = await server.postReq(id.text, pw.text);
-                                            print(int.parse(res) == 200);
-                                            if(res == '200'){
+
+                                            if(res.length > 0){
                                               correctSnackBar(context);
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(res)));
                                             }else {
                                               incorrectSnackbar(context);
                                             }
@@ -149,22 +149,25 @@ void correctSnackBar(BuildContext context){
 
 
 class Server {
-  Future<String> postReq(id, pw) async {
-    var url = Uri.parse(
-        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login');
+  Future<List> postReq(id, pw) async {
+    var url = Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes');
     print({'id':id, 'pw':pw});
     var response = await http.post(
       url,
+      headers: {
+        'Content-type': 'application/json',
+      },
       body: jsonEncode({'id':id, 'pw':pw})
     );
-    // http.Response response = await http.post(url,
-    //   body: jsonEncode({
-    //     'id': id.toString(),
-    //     'pw': pw.toString()
-    //   })
-    // );
-    print(response.body);
-    return response.body;
+
+    List json = jsonDecode(response.body);
+    List classes = [];
+    for (int i=0; i<json.length;i++) {
+      var classroom = json[i];
+      classes.add(Lecture(
+          classroom["className"], classroom["profName"], classroom["classId"]));
+    }
+    return classes;
   }
 }
 

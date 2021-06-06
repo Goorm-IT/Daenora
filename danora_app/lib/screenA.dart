@@ -9,18 +9,27 @@ import 'dart:convert';
 import 'package:danora_app/lecture.dart';
 
 class HomeScreen extends StatefulWidget{
+  List classes;
+  HomeScreen(this.classes);
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(this.classes);
 }
 
 class _HomeScreenState extends State<HomeScreen>{
 
-  List _data = [];
+  List _data;
+  _HomeScreenState(this._data);
 
   _fetchData(){
 
 
-    http.get(Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login')).then((response) {
+    http.post(
+      Uri.parse('http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes'),
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: jsonEncode({'id':'201663025'})
+    ).then((response) {
       String jsonString = response.body;
 
       if (response.statusCode == 200){
@@ -31,8 +40,8 @@ class _HomeScreenState extends State<HomeScreen>{
 
         for (int i=0; i<classes.length;i++){
           var classroom = classes[i];
-          Lecture classToAdd = Lecture(classroom["class_name"], classroom["prof_name"], classroom["class_code"]);
-          print(classToAdd.class_name);
+          Lecture classToAdd = Lecture(classroom["className"], classroom["profName"], classroom["classId"]);
+          print(classToAdd.className);
 
           setState(() {
             _data.add(classToAdd);
@@ -63,14 +72,14 @@ class _HomeScreenState extends State<HomeScreen>{
             Lecture classroom = _data[index];
             return GestureDetector(
               onTap: (){
-                print('test : ${classroom.class_code}');
+                print('test : ${classroom.classId}');
                 Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen2(classroom)));
               },
               child: Card(
                   child: Column(
                     children: <Widget>[
-                      Text("강의명: ${classroom.class_name}"),
-                      Text("교수명: ${classroom.prof_name}"),
+                      Text("강의명: ${classroom.className}"),
+                      Text("교수명: ${classroom.profName}"),
                     ],
                   )),
             );
