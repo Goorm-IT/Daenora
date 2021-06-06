@@ -9,13 +9,16 @@ import 'dart:convert';
 import 'lecture.dart';
 
 class HomeScreen extends StatefulWidget{
+  List classes;
+  HomeScreen(this.classes);
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(this.classes);
 }
 
 class _HomeScreenState extends State<HomeScreen>{
 
-  List _data = [];
+  List _data;
+  _HomeScreenState(this._data);
 
   _fetchData(){
 

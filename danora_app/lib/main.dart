@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'lecture.dart';
 import 'screenA.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,13 +119,13 @@ class _LogInState extends State<LogIn> {
                                           onPressed: () async
                                           {
                                             //show();
-                                            var res = await server.postReq(id.text, pw.text);
-                                            print(int.parse(res) == 200);
-                                            if(res == '200'){
+                                            loadingSnackBar(context);
+                                            var classes = await server.postReq(id.text, pw.text);
+                                            if(classes.length > 0){
                                               correctSnackBar(context);
                                               await Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.push(context, PageTransition(
                                                   type: PageTransitionType.leftToRightWithFade,
-                                                  child: HomeScreen()
+                                                  child: HomeScreen(classes)
                                               )));
                                               // Navigator.push(context, PageTransition(
                                               //   type: PageTransitionType.leftToRightWithFade,
@@ -172,11 +173,21 @@ void correctSnackBar(BuildContext context){
   );
 }
 
+void loadingSnackBar(BuildContext context){
+  Scaffold.of(context).showSnackBar(
+      SnackBar(content: Text('로그인 중',
+        textAlign: TextAlign.center,),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.amber,
+      )
+  );
+}
+
 
 class Server {
-  Future<String> postReq(id, pw) async {
+  Future<List> postReq(id, pw) async {
     var url = Uri.parse(
-        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/login');
+        'http://ec2-15-164-95-61.ap-northeast-2.compute.amazonaws.com:4000/classes');
     var response = await http.post(
       url,
       headers: {
@@ -184,14 +195,15 @@ class Server {
       },
       body: jsonEncode({'id':id, 'pw':pw})
     );
-    // http.Response response = await http.post(url,
-    //   body: jsonEncode({
-    //     'id': id.toString(),
-    //     'pw': pw.toString()
-    //   })
-    // );
-    print(response.body);
-    return response.body;
+
+    List json = jsonDecode(response.body);
+    List classes = [];
+    for (int i=0; i<json.length;i++) {
+      var classroom = json[i];
+      classes.add(Lecture(
+          classroom["className"], classroom["profName"], classroom["classId"]));
+    }
+    return classes;
   }
 }
 
