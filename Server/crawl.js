@@ -10,7 +10,7 @@ const CrawlWeb = {
       .forBrowser('firefox')
       .setFirefoxOptions(
         new firefox.Options()
-        //.headless()
+        .headless()
         .windowSize({ width: 640, height: 480 })
         .setPreference("general.useragent.override", "custom-user-agent") 
       ).build();
@@ -65,11 +65,11 @@ const CrawlWeb = {
         throw '로그인 실패';
     }
   },
-  getCourseList : async function() {
+  getCourses : async function(courseId) {
     let courses = [];
     try{
       if(this.driver == undefined) throw 'please open the driver first';
-      console.log('강의 목록 불러오는 중');
+      console.log('과제 목록 불러오는 중');
       let courseList = await (await this.driver.findElement(By.tagName('select'))).findElements(By.tagName('option'));
       for(let i=1; i<courseList.length; i++) {
         let course = (await courseList[i].getAttribute('value')).split(',');
@@ -84,7 +84,32 @@ const CrawlWeb = {
     }
     catch (e){
       console.log(e);
-      return '400';
+      throw '400';
+    }
+  },
+  getAssignments : async function() {
+    let assignments = [];
+    try{
+      if(this.driver == undefined) throw 'please open the driver first';
+      console.log('강의 목록 불러오는 중');
+      //let courseId = '20211A500047130800300';
+      let courseId = '20211AE10227130800300';
+      await this.driver.get(`https://cyber.anyang.ac.kr/Learner.do?cmd=viewLearnerStatusList&courseDTO.courseId=${courseId}&mainDTO.parentMenuId=menu_00101&mainDTO.menuId=menu_00100`);
+      let courseList = await (await this.driver.findElements(By.className('boardListBasic'))).findElements(By.tagName('option'));
+      for(let i=1; i<courseList.length; i++) {
+        let course = (await courseList[i].getAttribute('value')).split(',');
+        courses.push({
+          'classId': course[0],
+          'className': await courseList[i].getAttribute('text'),
+          'profName':course[1]
+        });
+      }
+      console.log('강의 목록 로드 완료');
+      return assignments;
+    }
+    catch (e){
+      console.log(e);
+      throw '400';
     }
   }
 };
