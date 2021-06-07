@@ -79,4 +79,6 @@ Crawl.getCourseList = async function(id, pw){
     return '400';
   }
 }
-module.exports = Crawl;
+
+Crawl.Login('201663035', 'Wjdtls753!');
+Crawl.getCourseList('201663035', 'Wjdtls753!');
